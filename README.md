@@ -1,7 +1,7 @@
 
 # 🚀 Dynamic Pricing API – Projet End-to-End Machine Learning & Cloud AWS
 
-## 📌 Présentation du projet : Dynamic Pricing pour la prédiction du bien d'un bien immobilier.
+## 📌 Présentation du projet : Dynamic Pricing pour la prédiction du prix d'un bien immobilier en fonction de certaines caractéristiques.
 
 Ce projet démontre le **cycle complet de mise en production d’un modèle de Machine Learning**, depuis l’entraînement local jusqu’à l’exposition publique d’une API dans le cloud.
 
@@ -60,7 +60,7 @@ Bonne pratique Cloud respectée :
 - Génération de clés d’accès sécurisées
 - Configuration via : aws configure
 
-```bash
+
 
 **Déploiement sur AWS**
 
