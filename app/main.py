@@ -6,7 +6,14 @@ import pandas as pd
 app = FastAPI()
 
 # Charger le modèle
-model = joblib.load("app/model.joblib")
+from pathlib import Path
+
+MODEL_PATH = Path("app/model.joblib")
+
+model = None
+
+if MODEL_PATH.exists():
+    model = joblib.load(MODEL_PATH)
 
 class Features(BaseModel):
     MedInc: float
@@ -22,8 +29,17 @@ class Features(BaseModel):
 def home():
     return {"message": "ML API is running 🚀"}
 
+from fastapi import FastAPI, HTTPException
+
 @app.post("/predict")
 def predict(data: Features):
-    df = pd.DataFrame([data.dict()])
+    if model is None:
+        raise HTTPException(
+            status_code=503,
+            detail="Model not available"
+        )
+
+    df = pd.DataFrame([data.model_dump()])
     prediction = model.predict(df)
+
     return {"prediction": float(prediction[0])}

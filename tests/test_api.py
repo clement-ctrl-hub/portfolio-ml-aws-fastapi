@@ -1,11 +1,11 @@
 from fastapi.testclient import TestClient
-
 from app.main import app
-
 
 client = TestClient(app)
 
 
-def test_api_documentation():
-    response = client.get("/docs")
+def test_home():
+    response = client.get("/")
+
     assert response.status_code == 200
+    assert response.json()["message"] == "ML API is running 🚀"
