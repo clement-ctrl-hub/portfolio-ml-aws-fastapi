@@ -1,17 +1,13 @@
-# Image Python officielle
-FROM python:3.10
+FROM python:3.12-slim
 
-# Dossier de travail dans le conteneur
 WORKDIR /app
 
-# Copier les fichiers
-COPY . .
+COPY requirements.txt .
 
-# Installer les dépendances
-RUN pip install --no-cache-dir fastapi uvicorn scikit-learn pandas joblib
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Exposer le port
+COPY app ./app
+
 EXPOSE 8000
 
-# Commande de démarrage
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

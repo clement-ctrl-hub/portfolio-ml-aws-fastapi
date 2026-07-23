@@ -1,19 +1,40 @@
-from fastapi import FastAPI
-from pydantic import BaseModel
-import joblib
+from contextlib import asynccontextmanager
+
 import pandas as pd
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
 
-app = FastAPI()
+from app.model_loader import load_model
 
-# Charger le modèle
-from pathlib import Path
-
-MODEL_PATH = Path("app/model.joblib")
 
 model = None
 
-if MODEL_PATH.exists():
-    model = joblib.load(MODEL_PATH)
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """
+    Charge le modèle une seule fois au démarrage de l'API.
+    """
+
+    global model
+
+    try:
+        model = load_model()
+        print("Modèle chargé avec succès.")
+    except Exception as error:
+        model = None
+        print(f"Erreur lors du chargement du modèle : {error}")
+
+    yield
+
+    model = None
+
+
+app = FastAPI(
+    title="Portfolio ML API",
+    lifespan=lifespan,
+)
+
 
 class Features(BaseModel):
     MedInc: float
@@ -25,21 +46,43 @@ class Features(BaseModel):
     Latitude: float
     Longitude: float
 
+
 @app.get("/")
 def home():
-    return {"message": "ML API is running 🚀"}
+    return {
+        "message": "ML API is running 🚀",
+        "model_loaded": model is not None,
+    }
 
-from fastapi import FastAPI, HTTPException
+
+@app.get("/health")
+def health():
+    if model is None:
+        raise HTTPException(
+            status_code=503,
+            detail="Model not available",
+        )
+
+    return {
+        "status": "healthy",
+        "model_loaded": True,
+    }
+
 
 @app.post("/predict")
 def predict(data: Features):
     if model is None:
         raise HTTPException(
             status_code=503,
-            detail="Model not available"
+            detail="Model not available",
         )
 
-    df = pd.DataFrame([data.model_dump()])
-    prediction = model.predict(df)
+    dataframe = pd.DataFrame(
+        [data.model_dump()]
+    )
 
-    return {"prediction": float(prediction[0])}
+    prediction = model.predict(dataframe)
+
+    return {
+        "prediction": float(prediction[0])
+    }
