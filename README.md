@@ -1,37 +1,29 @@
-# 🚀 Portfolio ML API - Déploiement AWS avec CI/CD
+# 🚀 Portfolio ML API
 
-API de Machine Learning développée avec FastAPI et déployée automatiquement sur AWS grâce à GitHub Actions.
+## Déploiement complet d'un modèle de Machine Learning sur AWS avec CI/CD
 
-## Objectif
+Ce projet montre comment mettre en production un modèle de Machine Learning grâce à :
 
-Ce projet montre la mise en production complète d'un modèle de Machine Learning.
-
-Fonctionnalités :
-
-- API REST FastAPI
-- Modèle Machine Learning
+- FastAPI
 - Docker
 - GitHub Actions
 - Amazon ECR
 - Amazon EC2
-- Amazon S3
-- AWS Systems Manager (SSM)
-- Déploiement automatique (CI/CD)
+- Application Load Balancer (ALB)
+- CI/CD automatique
 
-## Architecture
+L'objectif est de démontrer un pipeline complet allant de l'entraînement du modèle jusqu'à son déploiement automatique sur AWS.
 
-```text
-GitHub
-  │
-  ▼
-GitHub Actions
-  ├── Tests Pytest
-  ├── Build Docker
-  ├── Push vers Amazon ECR
-  └── Déploiement via AWS Systems Manager
-          │
-          ▼
-      Amazon EC2
-          │
-          ├── FastAPI
-          └── Téléchargement du modèle depuis Amazon S3
+---
+
+## ✨ Fonctionnalités
+
+- API REST FastAPI
+- Prédiction en temps réel
+- Documentation Swagger automatique
+- Déploiement automatique avec GitHub Actions
+- Image Docker versionnée
+- Hébergement sur Amazon EC2
+- Stockage Docker sur Amazon ECR
+- Load Balancer AWS
+- Endpoint Health Check
